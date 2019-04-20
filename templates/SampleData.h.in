@@ -1,0 +1,12 @@
+
+/** Generated through SampleData.h.in */
+
+
+/** gets a vector of sample logfile paths */
+QVector<QString> getSampleLogfiles()
+{
+    QVector<QString> vector;
+    @Data_Logfiles_QVector@
+
+    return vector;
+}

@@ -1,0 +1,24 @@
+
+------------------------------------------------------------------
+-- Time series: '@measurementVariable@'
+--
+-- Dependency: @Database_Schema_Prefix_Entity@Timeseries
+
+
+-- create entity for data log variable @measurementVariable@
+@sqlEntity@
+
+-- create relationship between entity of '@measurementVariable@' to Timeseries table
+@sqlRelation@
+
+-- create views for time series data
+CREATE VIEW IF NOT EXISTS @Database_Schema_Prefix_View@@group@@measurementVariable@ AS SELECT timestamp, msec, @Database_Schema_Prefix_Entity@@group@@measurementVariable@.@value@ FROM @Database_Schema_Prefix_Entity@Timeseries LEFT JOIN @Database_Schema_Prefix_Relationship@@group@@measurementVariable@ ON ( @Database_Schema_Prefix_Entity@Timeseries.id = @Database_Schema_Prefix_Relationship@@group@@measurementVariable@.timeid ) LEFT JOIN @Database_Schema_Prefix_Entity@@group@@measurementVariable@ ON ( @Database_Schema_Prefix_Entity@@group@@measurementVariable@.id = @Database_Schema_Prefix_Relationship@@group@@measurementVariable@.@measurementVariable@id) WHERE @Database_Schema_Prefix_Entity@@group@@measurementVariable@.@value@ NOT NULL ORDER BY timestamp ASC, msec ASC;
+
+-- create insert trigger for convenient sql usage by keeping the integrity on the data set
+CREATE TRIGGER @Database_Schema_Prefix_Trigger@@group@@measurementVariable@_insert AFTER INSERT ON @Database_Schema_Prefix_Entity@@group@@measurementVariable@ FOR EACH row BEGIN INSERT OR REPLACE INTO @Database_Schema_Prefix_Entity@Timeseries (timestamp, msec) VALUES ( datetime('now'), 0); INSERT INTO @Database_Schema_Prefix_Relationship@@group@@measurementVariable@ ( timeid, @measurementVariable@id ) VALUES ( last_insert_rowid(), new.id ); END;
+
+-- create triggers on views as aliases for more convenient data management
+CREATE TRIGGER @Database_Schema_Prefix_Trigger@@group@@Database_Schema_Prefix_View@@measurementVariable@_insert INSTEAD OF INSERT ON @Database_Schema_Prefix_View@@measurementVariable@ BEGIN INSERT INTO @Database_Schema_Prefix_Entity@@group@@measurementVariable@ (@value@) VALUES( NEW.@value@ ); END;
+
+------------------------------------------------------------------
+

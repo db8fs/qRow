@@ -1,0 +1,6 @@
+------------------------------------------------------------------
+-- qRow database scheme
+------------------------------------------------------------------
+
+CREATE TABLE @Database_Schema_Prefix_Entity@Timeseries ( id integer primary key autoincrement, timestamp integer, msec integer );
+

@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/src/Frontend">
+        <file>main.qml</file>
+        <file>WorkoutSessions.qml</file>
+        <file>WorkoutDetails.qml</file>
+        <file>VideoAnalysis.qml</file>
+    </qresource>
+</RCC>
