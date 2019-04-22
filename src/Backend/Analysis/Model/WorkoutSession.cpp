@@ -47,7 +47,7 @@ int WorkoutSession::getStrokeCount() const
     return m_strokes.size();
 }
 
-void WorkoutSession::update(const QVector<Waterrower::LogEntry> &logEntries)
+void WorkoutSession::update(const QVector<LogEntry> &logEntries)
 {
     for( auto i : logEntries )
     {

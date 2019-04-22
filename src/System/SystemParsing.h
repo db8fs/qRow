@@ -26,8 +26,8 @@ using qi::int_parser;
 using qi::eps;
 using boost::phoenix::ref;
 
-using GrammarString = std::string;
-using Iterator = GrammarString::const_iterator;
+using String = std::string;
+using Iterator = String::const_iterator;
 
 template<typename T> using LexerSymbols = qi::symbols<char, T>;
 template<typename T> using GrammarRuleData = qi::rule<Iterator, T, ascii::space_type>;

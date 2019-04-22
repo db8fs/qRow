@@ -5,8 +5,6 @@
 #include <QTimer>
 #include <QSharedPointer>
 
-namespace Waterrower {
-namespace Serial {
 
 
 /** adapts to the Waterrower USB UART for receiving status updates via serial communication */
@@ -47,8 +45,6 @@ private:
 };
 
 
-} // namespace Serial
-} // namespace Waterrower
 
 #endif // SERIALADAPTER_H
 

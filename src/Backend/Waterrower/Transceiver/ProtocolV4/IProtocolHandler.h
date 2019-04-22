@@ -1,8 +1,7 @@
 #ifndef IPROTOCOLHANDLER_H
 #define IPROTOCOLHANDLER_H
 
-namespace Waterrower {
-namespace Serial {
+#include "ProtocolV4.h"
 
 /** implementers of this interface may process serial protocol data */
 class IProtocolHandler
@@ -19,12 +18,12 @@ public:
     virtual void onStrokeStart() = 0;                                   /**< called when a stroke is being started */
     virtual void onStrokeEnd()  = 0;                                    /**< called when a stroke is being completed */
     virtual void onKeyPadInteraction( enum KeyPadInteraction ) = 0;     /**< called when the user interacted with the keypad buttons, passing @ref{KeyPadInteraction} argument */
-    virtual void onVersionInfo( const class WaterrowerVersion & ) = 0;  /**< called when the model/software version has been queried */
+    virtual void onVersionInfo( const struct WaterrowerVersion & ) = 0; /**< called when the model/software version has been queried */
     virtual void onTankVolumeReceived( int volume ) = 0;                /**< called when the tank volume (as stored in the rowing computer) has been received */
     virtual void onCalibrationPinsPerXXcm( int pins ) = 0;              /**< called when the number of pin edges allowed to equal xx cm has been received (pins_per_xxcm) */
     virtual void onCalibrationDistanceXXcm( int distance ) = 0;         /**< called when the number of cm per flagged xxcm no. of pins has been received (distance_xxcm) */
-    virtual void onTotalCaloriesReceived( int calories ) = 0;           /**< called when the total calories message has been received */
-    virtual void onStrokesReceived( int strokes ) = 0;
+	virtual void onTotalCaloriesReceived(int calories) = 0;				/**< called when the total calories message has been received */
+	virtual void onStrokesReceived(int strokes) = 0;
 };
 
 class IProtocolHandler;
@@ -36,8 +35,5 @@ typedef void (IProtocolHandler::*pFnArgumentVersion)    ( const WaterrowerVersio
 typedef void (IProtocolHandler::*pFnArgumentKeyPad)     ( enum KeyPadInteraction );
 
 
-
-} // namespace Serial
-} // namespace Waterrower
 
 #endif // IPROTOCOLHANDLER_H

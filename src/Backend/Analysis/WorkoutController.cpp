@@ -23,7 +23,7 @@ void WorkoutController::importLogfile(const QString &path)
     WorkoutSession  session;
 
     LogReader reader;
-    QVector<Waterrower::LogEntry> logEntries;
+    QVector<LogEntry> logEntries;
 
     reader.read( path, logEntries );
 

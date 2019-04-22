@@ -1,21 +1,16 @@
 #include "SerialAdapter.h"
 
-#include "../System/Logging.h"
-
-#include "WaterrowerProtocol.h"
+#include "SystemLogging.h"
 
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 
 #include <QRegularExpression>
 
-#include <QDebug>
 #include <QException>
-#include <QThread>
 #include <QQueue>
+#include <QVector>
 
-namespace Waterrower {
-namespace Serial {
 
 
 class SerialAdapter_Private
@@ -54,12 +49,12 @@ public:
             m_serialPort.write( m_outputQueue.front() );
             m_serialPort.waitForBytesWritten( -1 );
 
-            QString text( m_outputQueue.front() );
+			QString text(m_outputQueue.front());
 
-            text.replace( "\n", "");
-            text.replace( "\r", "");
+			text.replace("\n", "");
+			text.replace("\r", "");
 
-            qUSB.info( QString("<TX> ") + text, Logger::LogLevel_All );
+			qUSB.info(QString("<TX> ") + text, SystemLogging::LogLevel_All);
 
             m_outputQueue.pop_front();
         }
@@ -86,6 +81,7 @@ public:
 private:
     QQueue<QByteArray>      m_outputQueue;
     QSerialPort             m_serialPort;
+
 };
 
 
@@ -108,29 +104,48 @@ void SerialAdapter::update()
 {
     QList<QSerialPortInfo> listOfPorts( QSerialPortInfo::availablePorts() );
 
-    QRegularExpression regEx( "WR-S\[45\]" );
-    QRegularExpression calloutUnit( "cu\." );
+    QRegularExpression regEx( "WR-S\\[45\\]" );
+    
+#ifdef WIN32
+	QRegularExpression calloutUnit("COM\\.");
+#else
+	QRegularExpression calloutUnit("cu\\.");
+#endif
 
     for( auto i : listOfPorts )
     {
+#ifdef WIN32
+# ifdef _DEBUG
+		std::string description( QString( i.description() ).toStdString() );
+		std::string portname( QString( i.portName() ).toStdString() );
+		std::string manufacturer( QString( i.manufacturer() ).toStdString() );
+		std::string systemLocation( QString( i.systemLocation() ).toStdString() );
+# endif
+#endif
+
+
+// TODO: currently limited to Win32 hosts having no other COM-Ports available than the Waterrower (BTW: port classification should be configured in this object's controller (DIP) )
+#ifndef WIN32
         if( regEx.match( i.description() ).hasMatch() ) // checkout for Waterrower ergometer version 4 or 5
+#endif
         {
+#ifndef WIN32
             if( !calloutUnit.match( i.portName() ).hasMatch() ) //  skip /dev/cu.* devices for macOS/Linux - use tty instead
+#endif
             {
                 if( m_private.isNull() )
                 {
                     try
                     {
-                        m_private = QSharedPointer<SerialAdapter_Private>( new SerialAdapter_Private( i ) );
+                        m_private = QSharedPointer<SerialAdapter_Private>( new SerialAdapter_Private( i) );
 
-                        qUSB.info( QString("SerialAdapter: found Waterrower device at ") + i.systemLocation() );
+						qUSB.info(QString("SerialAdapter: found Waterrower device at ") + i.systemLocation());
 
                         Q_EMIT waterrowerConnected();
-
                     }
                     catch( const QException & exception )
                     {
-                        qUSB.warning( QString("SerialAdapter: Could not open serial port for writing!") + i.systemLocation() );
+						qUSB.warning(QString("SerialAdapter: Could not open serial port for writing!") + i.systemLocation());
                     }
                 }
                 else
@@ -150,8 +165,7 @@ void SerialAdapter::update()
 
     if( !m_private.isNull() )
     {
-        qUSB.warning( QString("SerialAdapter: waterrowerDisconnected()!") );
-
+		qUSB.warning(QString("SerialAdapter: waterrowerDisconnected()!"));
         Q_EMIT waterrowerDisconnected();
 
         m_private.reset();
@@ -169,5 +183,3 @@ void SerialAdapter::write(const QByteArray & text)
 
 
 
-} // namespace Serial
-} // namespace Waterrower

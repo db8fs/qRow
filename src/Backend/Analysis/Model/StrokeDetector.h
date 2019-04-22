@@ -19,7 +19,7 @@ public:
     ~StrokeDetector();
 
     /** performs state transitions and updates stroke states */
-    void update(const Waterrower::LogEntry &logEntry);
+    void update(const LogEntry &logEntry);
 
     /** gets the current (possibly incomplete) stroke */
     Stroke getStroke() const;

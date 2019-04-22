@@ -25,7 +25,7 @@ public:
 
 
     /** returns false when state transition needs to be performed */
-    bool update(const Waterrower::LogEntry &logEntry);
+    bool update(const LogEntry &logEntry);
 
     /** gets the identifier of this stroke */
     State getState() const;
@@ -41,7 +41,7 @@ public:
 
 private:
     const State                     m_state;        /**< the state identifier of this object     */
-    QVector<Waterrower::LogEntry>   m_logEntries;   /**< the log entries belonging to this state */
+    QVector<LogEntry>   m_logEntries;   /**< the log entries belonging to this state */
 };
 
 

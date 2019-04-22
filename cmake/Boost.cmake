@@ -17,7 +17,7 @@ function( checkBoost )
     set( Boost_USE_MULTITHREADED      ON)
     set( Boost_USE_STATIC_RUNTIME     OFF) # MSVCRT runtime dll or static
 
-    find_package(Boost 1.62.0 REQUIRED system)
+    find_package(Boost 1.62.0)
 
     set( 3rdParty_Boost_INCLUDES "${Boost_INCLUDE_DIR}" CACHE STRING "Boost Include paths to use")
     set( 3rdParty_Boost_LIBS "${Boost_LIBRARIES}" CACHE STRING "Boost Libs to use")

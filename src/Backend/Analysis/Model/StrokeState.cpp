@@ -4,7 +4,7 @@
 
 #include <QDebug>
 
-Phase buildPhase( const QVector<Waterrower::LogEntry> & entries )
+Phase buildPhase( const QVector<LogEntry> & entries )
 {
     if( entries.size() > 0)
     {
@@ -75,7 +75,7 @@ bool StrokeState::hasLogEntries() const
 }
 
 
-bool StrokeState::update(const Waterrower::LogEntry &logEntry)
+bool StrokeState::update(const LogEntry &logEntry)
 {
     if( m_state == State::Active   && logEntry.strokeActive ||
         m_state == State::Recovery && !logEntry.strokeActive )

@@ -29,7 +29,7 @@ public:
     int getMaximumSpeed();
     int getAverageSpeed();
 
-    void update( const QVector<Waterrower::LogEntry> & logEntries );
+    void update( const QVector<LogEntry> & logEntries );
 
     WorkoutSession & operator=( const WorkoutSession & );
 

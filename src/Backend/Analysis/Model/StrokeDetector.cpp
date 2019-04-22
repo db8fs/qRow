@@ -41,7 +41,7 @@ void StrokeDetector::onCheckStrokeCompletion()
     }
 }
 
-void StrokeDetector::update(const Waterrower::LogEntry &logEntry)
+void StrokeDetector::update(const LogEntry &logEntry)
 {
     if( logEntry.measurement.strokeCount > 0)
     {
@@ -68,7 +68,7 @@ void StrokeDetector::update(const Waterrower::LogEntry &logEntry)
 
 
 #if 0
-void StrokeModel::update(const Waterrower::LogEntry &logEntry)
+void StrokeModel::update(const LogEntry &logEntry)
 {
     m_private->update( logEntry );
 

@@ -1,8 +1,7 @@
 #ifndef ARGUMENTPARSER_H
 #define ARGUMENTPARSER_H
 
-#include "../Backend/System/Logging.h"
-#include "../Backend/System/Parsing.h"
+#include "SystemLogging.h"
 
 #include <QCommandLineParser>
 
@@ -11,20 +10,20 @@
 class ArgumentParser : QCommandLineParser
 {
 public:
-    ArgumentParser();
+	ArgumentParser();
 
-    /** performs the extraction */
-    void process(const QCoreApplication & app);
+	/** performs the extraction */
+	void process(const QCoreApplication & app);
 
 private:
 
-    /** */
-    void handleSubsystems(QCommandLineOption & subsystem, Waterrower::Logger::LogLevel loglevel);
+	/** */
+	void handleSubsystems(QCommandLineOption & subsystem, SystemLogging::LogLevel loglevel);
 
-    /** */
-    Waterrower::Logger::LogLevel handleTraces(QCommandLineOption & traces );
+	/** */
+	SystemLogging::LogLevel handleTraces(QCommandLineOption & traces);
 
 };
 
-
 #endif // ARGUMENTPARSER_H
+

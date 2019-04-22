@@ -1,8 +1,6 @@
-#include "WaterrowerProtocol.h"
-#include "IProtocolHandler.h"
+#include "SystemLogging.h"
+#include "Logging.h"
 
-namespace Waterrower {
-namespace Serial {
 
     /** lookup-table columns for waterrower registers */
     enum LUTIndex
@@ -20,8 +18,8 @@ namespace Serial {
         { "0A9",  "                TankVolume" },
         { "083",  "    CalibrationPinsPerXXcm" },
         { "084",  "   CalibrationDistanceXXcm" },
-        { "08A",  "             TotalCalories" },
-        { "140",  "                   Strokes" }
+		{ "08A",  "             TotalCalories" },
+		{ "140",  "                   Strokes" }
     };
 
 
@@ -96,5 +94,57 @@ namespace Serial {
 
 
 
-} // namespace Serial
-} // namespace Waterrower
+
+
+
+
+	void traceVersionMessage(const class WaterrowerVersion & version)
+	{
+		qUSB.info(	QString( "[ VERSION]          ") +
+					QString("        Model: ") +
+					QString::number(version.model) +
+					QString("  S/W v") +
+					QString::number(version.major) +
+					QString(".") +
+					QString::number(version.minor)
+		);
+	}
+
+
+	template<>
+	void traceMessage<enum Register, int>(enum Register cmd, int value)
+	{
+		qUSB.info(	QString("[REGISTER]") +
+					QString(" ") +
+					QString( toDescription(cmd) ) +
+					QString(" : ") +
+					QString::number(value), SystemLogging::LogLevel_Extended );
+	}
+
+
+	template<>
+	void traceMessage<enum BasicCommand, int>(enum BasicCommand cmd, int value)
+	{
+		qUSB.info(	QString("[   BASIC]") +
+					QString(" ") +
+					toDescription(cmd) +
+					QString(" : ") +
+					QString::number(value) );
+	}
+	
+
+
+	template<>
+	void traceMessage<enum BasicCommand>(enum BasicCommand cmd)
+	{
+		qUSB.info(	QString("[   BASIC]") +
+					QString(" ") +
+					toDescription(cmd));
+	}
+
+	
+	template<>
+	void traceMessage<enum KeyPadInteraction>(enum KeyPadInteraction cmd)
+	{
+		qUSB.info( QString("[  KEYPAD]") + QString(" ") + toDescription(cmd) );
+	}

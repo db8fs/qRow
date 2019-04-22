@@ -2,8 +2,6 @@
 
 #include "VideoTools.h"
 
-#include "../System/Logging.h"
-
 #include <QDebug>
 
 #include <QTime>
@@ -13,7 +11,7 @@ FaceDetector::FaceDetector()
 {
     if( !m_faceDetector.load( "C:/Projekte/opencv/data/haarcascades/haarcascade_frontalface_default.xml" ) )
     {
-        qVideo.warning( "OpenCVFilterRunnable: could not load XML file.", Waterrower::Logger::LogLevel_Basic );
+        qCritical( "OpenCVFilterRunnable: could not load XML file." );
     }
 
     connect( this, &FaceDetector::receiveImage, this, &FaceDetector::onProcessImage );
@@ -26,7 +24,7 @@ void FaceDetector::onProcessImage(const cv::Mat &image)
 
     std::vector<cv::Rect> faces( OpenCV::detectFaces( image, m_faceDetector ) );
 
-    qVideo.info( QString("Num Faces: ") + faces.size() );
+    qDebug() << "Num Faces: " << faces.size();
 
     for( auto face : faces )
     {

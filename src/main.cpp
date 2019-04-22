@@ -3,9 +3,6 @@
 #include <QtQml/QQmlEngine>
 #include <QQuickView>
 #include <QQmlContext>
-#include <QMessageLogger>
-#include <QDebug>
-#include <QCommandLineParser>
 
 #include "Backend/Analysis/Model/WorkoutModel.h"
 #include "Backend/Analysis/Model/SessionModel.h"
@@ -15,8 +12,7 @@
 #include "Backend/Video/FaceDetector.h"
 #include "SampleData.h"
 
-#include "Backend/Serial/WaterrowerController.h"
-#include "../System/Logging.h"
+#include "Backend/Waterrower/Waterrower.h"
 
 #include "Frontend/CLI/ArgumentParser.h"
 
@@ -37,32 +33,37 @@ int main( int argc, char** argv)
         if( i > 10 )
         {
             workoutController.importLogfile( item );
-            break;
+          break;
         }
     }
 
-    qRegisterMetaType<cv::Mat>("cv::Mat");
 
     QGuiApplication app( argc, argv );
     QQmlApplicationEngine engine;
 
-    app.setApplicationName( "qRow" );
-    app.setApplicationVersion( "0.1.0" );
+	app.setApplicationName("qRow");
+	app.setApplicationVersion("0.1.1");
 
-    ArgumentParser parser;
-    parser.process( app );
+	ArgumentParser parser;
+	parser.process(app);
 
-    WaterrowerController waterrowerController;
+
+    Waterrower waterrower;
+
+#if HAVE_OPENCV
+	qRegisterMetaType<cv::Mat>("cv::Mat");
 
     FaceDetector faceDetector;
     VideoFilterOpenCV openCVFilter( faceDetector );
 
-    engine.rootContext()->setContextProperty( "waterrower",         &waterrowerController );
-    engine.rootContext()->setContextProperty( "faceDetector",       &faceDetector);
-    engine.rootContext()->setContextProperty( "openCVFilter",       &openCVFilter );
-    engine.rootContext()->setContextProperty( "sessionsModel",      &sessionsModel );
-    engine.rootContext()->setContextProperty( "workoutModel",       &workoutModel);
-    engine.rootContext()->setContextProperty( "workoutController",  &workoutController );
+    engine.rootContext()->setContextProperty( "faceDetector", &faceDetector);
+    engine.rootContext()->setContextProperty( "openCVFilter", &openCVFilter );
+#endif
+	
+	engine.rootContext()->setContextProperty( "waterrower", &waterrower );
+	engine.rootContext()->setContextProperty( "sessionsModel", &sessionsModel );
+    engine.rootContext()->setContextProperty( "workoutModel", &workoutModel);
+    engine.rootContext()->setContextProperty( "workoutController", &workoutController );
 
     engine.load( QUrl(QStringLiteral("qrc:/src/Frontend/main.qml") ) );
 

@@ -1,7 +1,5 @@
 #include "VideoTools.h"
 
-#include "../System/Logging.h"
-
 #include <QtGlobal>
 
 #include <opencv2/core.hpp>
@@ -43,10 +41,10 @@ namespace OpenCV
             qCritical( "VideoTools::toGreyscale(): ARGB32_Premultiplied not supported!" );
             break;
         case QVideoFrame::Format_RGB32:
-            cvtColor( input, mat, COLOR_RGBA2GRAY );
+            cvtColor( input, mat, CV_RGBA2GRAY );
             break;
         case QVideoFrame::Format_RGB24:
-            cvtColor( input, mat, COLOR_RGB2GRAY );
+            cvtColor( input, mat, CV_RGB2GRAY );
             break;
         case QVideoFrame::Format_RGB565:
             qCritical( "VideoTools::toGreyscale(): RGB565 not supported!" );
@@ -58,32 +56,31 @@ namespace OpenCV
             qCritical( "VideoTools::toGreyscale(): ARGB8565_Premultiplied not supported!" );
             break;
         case QVideoFrame::Format_BGRA32:
-            cvtColor( input, mat, COLOR_BGRA2GRAY );
+            cvtColor( input, mat, CV_BGRA2GRAY );
             break;
         case QVideoFrame::Format_BGRA32_Premultiplied:
             qCritical( "VideoTools::toGreyscale(): BGRA32_Premultiplied not supported!" );
             break;
         case QVideoFrame::Format_BGR32:
-            cvtColor( input, mat, COLOR_BGRA2GRAY );
+            cvtColor( input, mat, CV_BGRA2GRAY );
             break;
         case QVideoFrame::Format_BGR24:
-            cvtColor( input, mat, COLOR_BGR2GRAY );
+            cvtColor( input, mat, CV_BGR2GRAY );
             break;
         case QVideoFrame::Format_BGR565:
-            cvtColor( input, mat, COLOR_BGR5652GRAY );
+            cvtColor( input, mat, CV_BGR5652GRAY );
             break;
         case QVideoFrame::Format_BGR555:
-            cvtColor( input, mat, COLOR_BGR5552GRAY );
+            cvtColor( input, mat, CV_BGR5552GRAY );
             break;
         case QVideoFrame::Format_BGRA5658_Premultiplied:
-            cvtColor( input, mat, COLOR_BGRA2GRAY );
-            qVideo.info( "VideoTools::toGreyscale(): BGRA5658_Premultiplied not supported!" );
+            qCritical( "VideoTools::toGreyscale(): BGRA5658_Premultiplied not supported!" );
             break;
         case QVideoFrame::Format_YUV420P:
-            cvtColor( input, mat, COLOR_YUV2GRAY_I420 );
+            qCritical( "VideoTools::toGreyscale(): YUV420P not supported!" );
             break;
         case QVideoFrame::Format_NV12:
-            cvtColor( input, mat, COLOR_YUV2GRAY_NV12 );
+            qCritical( "VideoTools::toGreyscale(): NV12 not supported!" );
             break;
         default:
             break;
@@ -112,10 +109,10 @@ namespace OpenCV
             qCritical( "VideoTools::fromGreyscale(): ARGB32_Premultiplied not supported!" );
             break;
         case QVideoFrame::Format_RGB32:
-            cvtColor( input, mat, COLOR_GRAY2RGBA);
+            cvtColor( input, mat, CV_GRAY2RGBA);
             break;
         case QVideoFrame::Format_RGB24:
-            cvtColor( input, mat, COLOR_GRAY2RGB );
+            cvtColor( input, mat, CV_GRAY2RGB );
             break;
         case QVideoFrame::Format_RGB565:
             qCritical( "VideoTools::fromGreyscale(): RGB565 not supported!" );
@@ -127,22 +124,22 @@ namespace OpenCV
             qCritical( "VideoTools::fromGreyscale(): ARGB8565_Premultiplied not supported!" );
             break;
         case QVideoFrame::Format_BGRA32:
-            cvtColor( input, mat, COLOR_GRAY2BGRA );
+            cvtColor( input, mat, CV_GRAY2BGRA );
             break;
         case QVideoFrame::Format_BGRA32_Premultiplied:
             qCritical( "VideoTools::fromGreyscale(): BGRA32_Premultiplied not supported!" );
             break;
         case QVideoFrame::Format_BGR32:
-            cvtColor( input, mat, COLOR_GRAY2BGRA );
+            cvtColor( input, mat, CV_GRAY2BGRA );
             break;
         case QVideoFrame::Format_BGR24:
-            cvtColor( input, mat, COLOR_GRAY2BGR );
+            cvtColor( input, mat, CV_GRAY2BGR );
             break;
         case QVideoFrame::Format_BGR565:
-            cvtColor( input, mat, COLOR_GRAY2BGR565 );
+            cvtColor( input, mat, CV_GRAY2BGR565 );
             break;
         case QVideoFrame::Format_BGR555:
-            cvtColor( input, mat, COLOR_GRAY2BGR555 );
+            cvtColor( input, mat, CV_GRAY2BGR555 );
             break;
         case QVideoFrame::Format_BGRA5658_Premultiplied:
             qCritical( "VideoTools::fromGreyscale(): BGRA5658_Premultiplied not supported!" );
@@ -151,11 +148,7 @@ namespace OpenCV
             qCritical( "VideoTools::fromGreyscale(): YUV420P not supported!" );
             break;
         case QVideoFrame::Format_NV12:
-            {
-                cv::Mat tmp;
-                cvtColor( input, tmp, COLOR_GRAY2BGRA );
-                cvtColor( tmp, mat, COLOR_BGRA2YUV_I420 );
-            }
+            qCritical( "VideoTools::fromGreyscale(): NV12 not supported!" );
             break;
         default:
             break;
@@ -222,7 +215,7 @@ namespace OpenCV
     std::vector<cv::Rect> detectFaces( const cv::Mat & image, cv::CascadeClassifier & faceDetector )
     {
         std::vector<cv::Rect> faces;
-        faceDetector.detectMultiScale( image, faces, 1.1, 2, CASCADE_SCALE_IMAGE | CASCADE_DO_CANNY_PRUNING, Size(30, 30) );
+        faceDetector.detectMultiScale( image, faces, 1.1, 2, CV_HAAR_SCALE_IMAGE | CV_HAAR_DO_CANNY_PRUNING, Size(30, 30) );
         return faces;
     }
 

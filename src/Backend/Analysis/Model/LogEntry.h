@@ -3,8 +3,7 @@
 
 #include <QDateTime>
 
-namespace Waterrower
-{
+
     struct TimeStamp
     {
         TimeStamp() : year(0), month(0), day(0), hour(0), minute(0), second(0), microseconds(0) {}
@@ -62,6 +61,6 @@ namespace Waterrower
         Calories        calories;
     };
 
-} // namespace Waterrower
+
 
 #endif // LOGENTRY_H
