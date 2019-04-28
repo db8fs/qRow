@@ -1,13 +1,12 @@
 #ifndef WATERROWERPROTOCOL_H
 #define WATERROWERPROTOCOL_H
 
-#include <QString>
-#include "../ProtocolV4.h"
+#include <QByteArray>
 
     /** creates a data command string for the given register address.
         @detail Use @ref{command} to indicate if command is used for requesting register values from the waterrower. Registers may hold 1, 2 or 3 Bytes of data as indicated by @ref{dlc}.
      */
-    QByteArray buildDataCommand( enum Register address, enum DLC dlc = DLC_1_Byte, enum WR_Command command = WR_Command_RequestValue );
+    QByteArray buildDataCommand( enum Register address, enum DLC dlc, enum WR_Command command );
 
     /** returns a string description of the given command */
     QByteArray toDescription( enum BasicCommand command );

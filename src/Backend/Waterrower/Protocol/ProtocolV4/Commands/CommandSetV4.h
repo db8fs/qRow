@@ -1,5 +1,5 @@
-#ifndef COMMANDS_H_
-#define COMMANDS_H_
+#ifndef COMMANDSET_V4_H_
+# define COMMANDSET_V4_H_
 
 struct WaterrowerVersion { int model = { 0 }; int major = { 0 }; int minor = { 0 }; };
 
@@ -9,6 +9,7 @@ struct WaterrowerCalibration
 
 	int pinsPerXXcm = { 32 }; int distanceXXcm = { 35 };
 };
+
 
 /** enumerates the possible operations possible on waterrower data registers */
 enum WR_Command
@@ -65,33 +66,6 @@ enum KeyPadInteraction
 	KeyPad_StoredPrograms,          /**< Accesses last 9 historic workout programs, as stored by the monitor's AutoStore function */
 	KeyPad_HoldCancel               /**< Cancels current selection */
 };
-
-#include <QByteArray>
-
-class ProtocolV4
-{
-public:
-	ProtocolV4(class IProtocolHandler & protocolHandler);
-	~ProtocolV4();
-
-
-	QByteArray  getCmdHeartRate() const;
-	QByteArray  getCmdDistance() const;
-	QByteArray  getCmdAverageSpeed() const;
-	QByteArray  getCmdCalories() const;
-	QByteArray  getCmdStrokes() const;
-	QByteArray  getCmdTankVolume() const;
-	QByteArray  getCmdCalibrationPinsPerXXcm() const;
-	QByteArray  getCmdCalibrationDistanceXXcm() const;
-
-
-	bool receive( const QString & line );
-
-private:
-	struct Protocol_Private* const	m_private;
-
-};
-
 
 
 #endif

@@ -1,8 +1,6 @@
 #ifndef IPROTOCOLHANDLER_H
 #define IPROTOCOLHANDLER_H
 
-#include "ProtocolV4.h"
-
 /** implementers of this interface may process serial protocol data */
 class IProtocolHandler
 {

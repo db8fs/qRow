@@ -1,10 +1,10 @@
 #include "Parser.h"
 
 
-#include "../IProtocolHandler.h"
+#include "IProtocolHandler.h"
 
-#include "../ProtocolV4.h"
 #include "../Logging/Logging.h"
+#include "../Commands/CommandSetV4.h"
 
 
 #include "SystemLogging.h"

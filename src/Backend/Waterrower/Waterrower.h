@@ -1,8 +1,6 @@
 #ifndef WATERROWERCONTROLLER_H
 #define WATERROWERCONTROLLER_H
 
-#include "Transceiver/ProtocolV4/IProtocolHandler.h"
-#include "Transceiver/Serial/SerialAdapter.h"
 #include <QObject>
 
 /** responsible for receiving and translating serial USB communication into Qt signals */
@@ -124,12 +122,7 @@ signals:
 
 
 private:
-
-    class WaterrowerModelV4* const		m_model;
-
-	class ProtocolV4Adapter* const	m_protocolAdapter;
-
-	class Transceiver* const		m_transceiver;
+	struct Waterrower_Private* const	m_private;
 };
 
 

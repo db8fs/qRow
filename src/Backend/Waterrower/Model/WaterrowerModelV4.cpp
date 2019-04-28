@@ -1,6 +1,9 @@
 #include "../Waterrower.h"
 #include "WaterrowerModelV4.h"
 
+#include "Protocol/ProtocolV4/Commands/CommandSetV4.h"
+
+
 struct DataModelV4_Private
 {
 	WaterrowerVersion       Version;                    /**< model+software version */

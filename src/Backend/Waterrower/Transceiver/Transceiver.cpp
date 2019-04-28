@@ -2,9 +2,10 @@
 
 #include "SystemLogging.h"
 
-#include "ProtocolV4/ProtocolV4.h"
+#include "Protocol/ProtocolV4Adapter.h"
 #include "Serial/SerialAdapter.h"
 
+#include <QTimer>
 
 
 	/////
@@ -12,48 +13,42 @@
 	/** defines transceiver state */
 	struct Transceiver_Private
 	{
-		Transceiver_Private( IProtocolHandler & protocolHandler)
+		Transceiver_Private( ProtocolV4Adapter & protocol)
 			:	m_serialAdapter(),
 				m_highPriorityTimer(),
 				m_lowPriorityTimer(),
-				m_protocol(protocolHandler)
+				m_protocol( protocol )
 		{
 		}
 
 		// request firmware version and rowing computer model
 		void txVersionRequest()
 		{
-			m_serialAdapter.write( "IV?\r\n" );
+			m_protocol.txVersionRequest( m_serialAdapter );
 		}
 
 		// sends the data requests with high update rate	
 		void txHighPrioPollRequest()
 		{
-			m_serialAdapter.write( m_protocol.getCmdHeartRate() );
-			m_serialAdapter.write( m_protocol.getCmdDistance() );
-			m_serialAdapter.write( m_protocol.getCmdAverageSpeed() );
-			m_serialAdapter.write( m_protocol.getCmdCalories() );
-			m_serialAdapter.write( m_protocol.getCmdStrokes() );
+			m_protocol.txHighPrioRequests( m_serialAdapter );
 		}
 
 		// sends the data requests with low update rate
 		void txLowPrioPollRequest()
 		{
-			m_serialAdapter.write( m_protocol.getCmdTankVolume() );
-			m_serialAdapter.write( m_protocol.getCmdCalibrationPinsPerXXcm() );
-			m_serialAdapter.write( m_protocol.getCmdCalibrationDistanceXXcm() );
+			m_protocol.txLowPrioRequests( m_serialAdapter );
 		}
 
 		bool rxReceive( const QString & line )
 		{
-			return m_protocol.receive(line);
+			return m_protocol.rxReceive(line);
 		}
 
 
 		SerialAdapter		m_serialAdapter;
 		QTimer				m_highPriorityTimer;		/**< timer for requesting extended ergometer computer data with higher priority  */
 		QTimer				m_lowPriorityTimer;			/**< timer for requesting low priority ergometer monitor data */
-		ProtocolV4			m_protocol;					/**< the serial protocol object to be used for Waterrower v4/v 5 */
+		ProtocolV4Adapter &	m_protocol;					/**< the serial protocol object to be used for Waterrower v4/v5 */
 	};
 
 
@@ -61,9 +56,9 @@
 	//////
 
 
-	Transceiver::Transceiver( class IProtocolHandler & protocolHandler )
+	Transceiver::Transceiver( class ProtocolV4Adapter & protocol )
 		:	QObject(), 
-			m_private( new Transceiver_Private( protocolHandler ) )
+			m_private( new Transceiver_Private( protocol ) )
 	{
 		connect( &m_private->m_serialAdapter,		&SerialAdapter::waterrowerDisconnected, this, &Transceiver::onWaterrowerDisconnected );
 		connect( &m_private->m_serialAdapter,		&SerialAdapter::waterrowerLineReceived, this, &Transceiver::onWaterrowerLineReceived);

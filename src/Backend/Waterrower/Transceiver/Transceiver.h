@@ -2,17 +2,14 @@
 #define WATERROWERGRAMMAR_H
 
 #include <QString>
-#include <QSharedPointer>
-
-#include "Serial/SerialAdapter.h"
-#include <QTimer>
+#include <QObject>
 
 class Transceiver : public QObject
 {
 	Q_OBJECT
 
 public:
-	Transceiver( class IProtocolHandler & protocolHandler );
+	Transceiver( class ProtocolV4Adapter & protocolHandler );
 	~Transceiver();
 
 signals:

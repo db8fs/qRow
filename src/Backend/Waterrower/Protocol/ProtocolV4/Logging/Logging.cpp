@@ -1,6 +1,6 @@
 #include "SystemLogging.h"
 #include "Logging.h"
-
+#include "../Commands/CommandSetV4.h"
 
     /** lookup-table columns for waterrower registers */
     enum LUTIndex
@@ -54,8 +54,7 @@
     const char* const translateCommand( enum BasicCommand command )  {   return s_basicCommandLUT[ command ][ LUT_Address ];     }
     const char* const translateAddress( Register address )           {   return s_registerAddresses[ address ][ LUT_Address ];   }
 
-
-    QByteArray buildDataCommand( enum Register address, enum DLC dlc, enum WR_Command command )
+	QByteArray buildDataCommand(enum Register address, enum DLC dlc, enum WR_Command command )
     {
         QByteArray result( "I" );
 
